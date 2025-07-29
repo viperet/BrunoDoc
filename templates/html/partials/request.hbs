@@ -1,0 +1,123 @@
+<div class="request" id="{{meta.name}}">
+    <div class="request-header">
+        <h3 class="request-title">{{meta.name}}</h3>
+        <div class="request-meta">
+            {{#if method}}
+            <span class="method-badge method-{{method}}">{{method}}</span>
+            {{/if}}
+            {{#if url}}
+            <code class="url">{{url}}</code>
+            {{/if}}
+        </div>
+    </div>
+
+    <div class="request-body">
+        {{#if headers}}
+        <div class="section">
+            <h3>📋 Headers</h3>
+            <table class="params-table">
+                <thead>
+                    <tr>
+                        <th>Header</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each headers}}
+                    <tr>
+                        <td class="param-key">{{@key}}</td>
+                        <td>{{this}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        {{/if}}
+
+        {{#if queryParams}}
+        <div class="section">
+            <h3>🔍 Query Parameters</h3>
+            <table class="params-table">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Value</th>
+                        {{!-- <th>Status</th> --}}
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each queryParams}}
+                    <tr>
+                        <td class="param-key">{{@key}}</td>
+                        <td>{{#if this.value}}{{this.value}}{{else}}{{this}}{{/if}}</td>
+                        {{!-- <td>{{#if this.disabled}}❌ Disabled{{else}}✅ Enabled{{/if}}</td> --}}
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        {{/if}}
+
+        {{#if pathParams}}
+        <div class="section">
+            <h3>🛣️ Path Parameters</h3>
+            <table class="params-table">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each pathParams}}
+                    <tr>
+                        <td class="param-key">{{@key}}</td>
+                        <td>{{this}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+        {{/if}}
+
+        {{#if auth}}
+        <div class="section">
+            <h3>🔒 Authentication</h3>
+            <div class="auth-info">
+                <div class="auth-type">{{auth.type}}</div>
+                {{!-- {{#if auth.details}}
+                <pre class="code-block">{{auth.details}}</pre>
+                {{/if}} --}}
+            </div>
+        </div>
+        {{/if}}
+
+        {{#if body}}
+        <div class="section">
+            <h3>📝 Request Body</h3>
+            <div class="json-block">{{{body}}}</div>
+        </div>
+        {{/if}}
+
+        {{#if tests}}
+        <div class="section">
+            <h3>🧪 Tests</h3>
+            <div class="code-block">{{tests}}</div>
+        </div>
+        {{/if}}
+
+        {{#if scripts}}
+        <div class="section">
+            <h3>⚙️ Scripts</h3>
+            {{#if scripts.preRequest}}
+            <h4>Pre-request Script</h4>
+            <div class="code-block">{{scripts.preRequest}}</div>
+            {{/if}}
+            {{#if scripts.postResponse}}
+            <h4>Post-response Script</h4>
+            <div class="code-block">{{scripts.postResponse}}</div>
+            {{/if}}
+        </div>
+        {{/if}}
+    </div>
+</div>

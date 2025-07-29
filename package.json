@@ -1,0 +1,39 @@
+{
+  "name": "bruno-docs-cli",
+  "version": "1.0.0",
+  "description": "A command-line tool for building documentation from Bruno collection.",
+  "main": "src/index.ts",
+  "type": "module",
+  "bin": {
+    "brunodoc": "./bin/brunodoc.ts"
+  },
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "clean": "rm -rf dist",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "typescript",
+    "cli",
+    "console",
+    "commander"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^11.1.0",
+    "handlebars": "^4.7.8",
+    "minimatch": "^10.0.3"
+  },
+  "devDependencies": {
+    "@types/handlebars": "^4.1.0",
+    "@types/node": "^20.10.0",
+    "tsx": "^4.6.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

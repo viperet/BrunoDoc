@@ -1,0 +1,11 @@
+<li class="folder">
+    <div class="folder-title">📁 {{name}}{{#if files.length}} ({{files.length}} files){{/if}}</div>
+    <ul class="folder-files">
+        {{#each files}}
+        <li><a href="#{{meta.name}}">📄 {{meta.name}}</a></li>
+        {{/each}}
+        {{#each folders}}
+            {{> folder}}
+        {{/each}}
+    </ul>
+</li>

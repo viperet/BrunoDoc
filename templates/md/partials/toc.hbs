@@ -1,0 +1,12 @@
+## 📚 Table of Contents
+
+{{#each allRequests}}
+{{#if @first}}
+### Endpoints
+{{/if}}
+{{#unless @first}}{{#if (ne ../allRequests.[subtract @index 1].folderName folderName)}}
+
+### {{folderName}}
+{{/if}}{{/unless}}
+- [{{meta.name}}](#{{kebabCase meta.name}})
+{{/each}}

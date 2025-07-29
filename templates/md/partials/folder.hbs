@@ -1,0 +1,7 @@
+- **📁 {{name}}** ({{files.length}} files)
+{{#each files}}
+  - [📄 {{meta.name}}](#{{meta.name}})
+{{/each}}
+{{#each folders}}
+  {{> folder}}
+{{/each}}

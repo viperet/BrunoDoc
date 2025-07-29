@@ -1,0 +1,15 @@
+### {{meta.name}}
+
+{{#if method}}
+**{{method}}** {{#if url}}`{{url}}`{{else}}`No URL specified`{{/if}}
+{{else}}
+**Request** {{#if url}}`{{url}}`{{else}}`No URL specified`{{/if}}
+{{/if}}
+
+{{#if meta.seq}}
+> **Sequence:** {{meta.seq}} | **Type:** {{meta.type}}
+{{/if}}
+
+{{> request-details}}
+
+---

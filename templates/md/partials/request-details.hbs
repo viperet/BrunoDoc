@@ -1,0 +1,82 @@
+{{#if headers}}
+#### 📋 Headers
+
+| Header | Value |
+|--------|-------|
+{{#each headers}}
+| `{{@key}}` | {{this}} |
+{{/each}}
+
+{{/if}}
+
+{{#if queryParams}}
+#### 🔍 Query Parameters
+
+| Parameter | Value | Status |
+|-----------|-------|--------|
+{{#each queryParams}}
+| `{{@key}}` | {{#if this.value}}{{this.value}}{{else}}{{this}}{{/if}} | {{#if this.disabled}}❌ Disabled{{else}}✅ Enabled{{/if}} |
+{{/each}}
+
+{{/if}}
+
+{{#if pathParams}}
+#### 🛣️ Path Parameters
+
+| Parameter | Value |
+|-----------|-------|
+{{#each pathParams}}
+| `{{@key}}` | {{this}} |
+{{/each}}
+
+{{/if}}
+
+{{#if auth}}
+#### 🔒 Authentication
+
+**Type:** {{auth.type}}
+
+{{#if auth.details}}
+```
+{{auth.details}}
+```
+{{/if}}
+
+{{/if}}
+
+{{#if body}}
+#### 📝 Request Body
+
+```{{#if (eq meta.type "http")}}json{{else}}graphql{{/if}}
+{{body}}
+```
+
+{{/if}}
+
+{{#if tests}}
+#### 🧪 Tests
+
+```javascript
+{{tests}}
+```
+
+{{/if}}
+
+{{#if scripts}}
+#### ⚙️ Scripts
+
+{{#if scripts.preRequest}}
+**Pre-request Script:**
+```javascript
+{{scripts.preRequest}}
+```
+
+{{/if}}
+{{#if scripts.postResponse}}
+**Post-response Script:**
+```javascript
+{{scripts.postResponse}}
+```
+
+{{/if}}
+{{/if}}

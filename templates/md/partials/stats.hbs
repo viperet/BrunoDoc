@@ -1,0 +1,13 @@
+## 📊 Collection Statistics
+
+| HTTP Method | Count |
+|-------------|-------|
+{{#each methodStats}}
+| **{{@key}}** | {{this}} |
+{{/each}}
+
+## 📁 Folder Breakdown
+
+{{#each folderStats}}
+- **{{name}}**: {{fileCount}} files
+{{/each}}
