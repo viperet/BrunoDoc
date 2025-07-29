@@ -6,6 +6,11 @@ import { TemplateEngine } from '../utils/template-engine.js';
 import { writeFileSync, mkdirSync } from 'fs';
 import { join, dirname, resolve } from 'path';
 import { readdirSync, statSync } from 'fs';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 
 export function buildCommand(options: BuildOptions): void {
   // Validate input dir exists
@@ -64,8 +69,9 @@ function generateDocumentation(collection: BruCollection, options: BuildOptions)
 
   const [format, template] = options.format.split(':');
 
+  // TODO - allow custom template directory
   // Load partials
-  const templateDir = resolve(process.cwd(), 'templates', format || 'html');
+  const templateDir = resolve(__dirname, '../../templates', format || 'html');
   const partialsDir = join(templateDir, 'partials');
 
   if (!fileExists(templateDir) || !isDirectory(templateDir)) {
