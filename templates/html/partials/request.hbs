@@ -6,15 +6,21 @@
             <span class="method-badge method-{{method}}">{{method}}</span>
             {{/if}}
             {{#if url}}
-            <code class="url">{{url}}</code>
+            <div class="url">{{formatUrl url}}</div>
             {{/if}}
         </div>
     </div>
 
+    {{#if description}}
+    <div class="request-description">
+        <p>{{description}}</p>
+    </div>
+    {{/if}}
+
     <div class="request-body">
         {{#if headers}}
         <div class="section">
-            <h3>📋 Headers</h3>
+            <h3>Headers</h3>
             <table class="params-table">
                 <thead>
                     <tr>
@@ -36,7 +42,7 @@
 
         {{#if queryParams}}
         <div class="section">
-            <h3>🔍 Query Parameters</h3>
+            <h3>Query Parameters</h3>
             <table class="params-table">
                 <thead>
                     <tr>
@@ -60,7 +66,7 @@
 
         {{#if pathParams}}
         <div class="section">
-            <h3>🛣️ Path Parameters</h3>
+            <h3>Path Parameters</h3>
             <table class="params-table">
                 <thead>
                     <tr>
@@ -82,7 +88,7 @@
 
         {{#if auth}}
         <div class="section">
-            <h3>🔒 Authentication</h3>
+            <h3>Authentication</h3>
             <div class="auth-info">
                 <div class="auth-type">{{auth.type}}</div>
                 {{!-- {{#if auth.details}}
@@ -94,21 +100,21 @@
 
         {{#if body}}
         <div class="section">
-            <h3>📝 Request Body</h3>
+            <h3>Request Body</h3>
             <div class="json-block">{{{body}}}</div>
         </div>
         {{/if}}
 
         {{#if tests}}
         <div class="section">
-            <h3>🧪 Tests</h3>
+            <h3>Tests</h3>
             <div class="code-block">{{tests}}</div>
         </div>
         {{/if}}
 
         {{#if scripts}}
         <div class="section">
-            <h3>⚙️ Scripts</h3>
+            <h3>Scripts</h3>
             {{#if scripts.preRequest}}
             <h4>Pre-request Script</h4>
             <div class="code-block">{{scripts.preRequest}}</div>

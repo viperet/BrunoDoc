@@ -20,6 +20,7 @@ program
   .option('-i, --input <path>', 'Bruno directory path', './Collection')
   .option('-o, --output <path_or_file>', 'output documentation path or file name', './docs')
   .option('-f, --format <type>', 'output format (html/md)', 'html')
+  .option('-e, --env <name>', 'environment name to use for variable substitution')
   .option('-x, --exclude <patterns...>', 'exclude certain files or directories')
   .option('-v, --verbose', 'verbose output')
   .action((options: BuildOptions) => {

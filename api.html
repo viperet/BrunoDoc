@@ -1,0 +1,1814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>api.sentinus.vision - API Documentation</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+    
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background-color: #f8f9fa;
+      }
+    
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+    
+      .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        border-radius: 8px;
+      }
+    
+      .header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        text-align: center;
+      }
+    
+      .header p {
+        text-align: center;
+        font-size: 1.1rem;
+        opacity: 0.9;
+      }
+    
+      .stats {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-top: 1rem;
+      }
+    
+      .stat {
+        text-align: center;
+      }
+    
+      .stat-number {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+    
+      .stat-label {
+        font-size: 0.9rem;
+        opacity: 0.8;
+      }
+    
+      .sidebar {
+        background: white;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+    
+      .sidebar h2 {
+        color: #4a5568;
+        margin-bottom: 1rem;
+        font-size: 1.3rem;
+      }
+    
+      .nav-tree {
+        list-style: none;
+      }
+    
+      .nav-tree li {
+        margin: 0.5rem 0;
+      }
+    
+      .nav-tree a {
+        color: #667eea;
+        text-decoration: none;
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        display: block;
+        transition: background-color 0.2s;
+      }
+    
+      .nav-tree a:hover {
+        background-color: #f1f5f9;
+      }
+    
+      .folder {
+        margin: 1rem 0;
+      }
+    
+      .folder-title {
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 0.5rem;
+        padding: 0.5rem;
+        background-color: #f7fafc;
+        border-radius: 4px;
+        border-left: 4px solid #667eea;
+      }
+    
+      .folder-files {
+        margin-left: 1rem;
+        list-style: none;
+      }
+    
+      .main-content {
+        background: white;
+        border-radius: 8px;
+        padding: 2rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+    
+      .authentication {
+        margin-bottom: 3rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        overflow: hidden;
+        padding: 1.5rem;
+      }
+    
+      .request {
+        margin-bottom: 3rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+    
+      .request-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e2e8f0;
+      }
+    
+      .request-title {
+        font-size: 1.5rem;
+        color: #2d3748;
+        margin-bottom: 0.5rem;
+      }
+    
+      .request-meta {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+    
+      .method-badge {
+        padding: 0.5rem 0.5rem;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 0.875rem;
+        text-transform: uppercase;
+      }
+    
+      .method-GET {
+        background-color: #d4edda;
+        color: #155724;
+      }
+    
+      .method-POST {
+        background-color: #fff3cd;
+        color: #856404;
+      }
+    
+      .method-PUT {
+        background-color: #cce5ff;
+        color: #004085;
+      }
+    
+      .method-DELETE {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+    
+      .method-PATCH {
+        background-color: #e2e3e5;
+        color: #383d41;
+      }
+    
+      .url {
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        background-color: #f8f9fa;
+        padding: 0.5rem;
+        border-radius: 4px;
+        border: 1px solid #dee2e6;
+        font-size: 0.9rem;
+      }
+      .url .protocol {
+        color: #6c757d;
+      }
+      .url .host {
+        color: #007bff;
+      }
+      .url .path {
+        color: #28a745;
+      }
+      .url .param {
+        color: #7e1105;
+      }
+    
+      .request-description {
+        padding: 1.5rem;
+        color: #4a5568;
+        font-size: 1rem;
+        line-height: 1.5;
+        border-bottom: 1px solid #e2e8f0;
+      }
+    
+      .request-body {
+        padding: 1.5rem;
+      }
+    
+      .section {
+        margin-bottom: 2rem;
+      }
+    
+      .section h3 {
+        color: #4a5568;
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+        border-bottom: 2px solid #e2e8f0;
+        padding-bottom: 0.5rem;
+      }
+    
+      .params-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+      }
+    
+      .params-table th,
+      .params-table td {
+        padding: 0.75rem;
+        text-align: left;
+        border-bottom: 1px solid #e2e8f0;
+      }
+    
+      .params-table th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+        color: #4a5568;
+      }
+    
+      .param-key {
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-weight: 600;
+      }
+    
+      .json-block,
+      .code-block {
+        background-color: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 4px;
+        padding: 1rem;
+        overflow-x: auto;
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        font-size: 0.9rem;
+        line-height: 1.4;
+      }
+    
+      .auth-info {
+        background-color: #fff5f5;
+        border: 1px solid #fed7d7;
+        border-radius: 4px;
+        padding: 1rem;
+        margin-top: 1rem;
+      }
+    
+      .auth-type {
+        font-weight: 600;
+        color: #c53030;
+      }
+    
+      .footer {
+        text-align: center;
+        margin-top: 3rem;
+        padding: 2rem;
+        color: #718096;
+        border-top: 1px solid #e2e8f0;
+      }
+    
+      .json-bracket,
+      .json-brace {
+        color: #6b7280;
+        font-weight: bold;
+      }
+    
+      .json-handlebars {
+        color: #662154;
+      }
+    
+      .json-array,
+      .json-object {
+        margin-left: 2rem;
+      }
+    
+      .json-string {
+        color: #155724;
+      }
+    
+      .json-key {
+        color: #004085;
+      }
+    
+      .json-number {
+        color: #480808;
+      }
+    
+      @media (max-width: 768px) {
+        .container {
+          padding: 10px;
+        }
+    
+        .header h1 {
+          font-size: 2rem;
+        }
+    
+        .stats {
+          flex-direction: column;
+          gap: 1rem;
+        }
+    
+        .request-meta {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+    </style>
+</head>
+<body>
+  <div class="container">
+  
+      <div class="sidebar">
+          <h2>API Requests</h2>
+          <ul class="nav-tree">
+                  <li class="folder">
+                      <div class="folder-title">Comparisons (2 requests)</div>
+                      <ul class="folder-files">
+                          <li><a href="#Update Comparison">Update Comparison</a></li>
+                          <li><a href="#Reprocess Comparison">Reprocess Comparison</a></li>
+                      </ul>
+                  </li>
+                  <li class="folder">
+                      <div class="folder-title">Pages (8 requests)</div>
+                      <ul class="folder-files">
+                          <li><a href="#List Pages">List Pages</a></li>
+                          <li><a href="#List Pages: With sorting">List Pages: With sorting</a></li>
+                          <li><a href="#List Pages: With pagination">List Pages: With pagination</a></li>
+                          <li><a href="#Add a Page">Add a Page</a></li>
+                          <li><a href="#Update a Page: Change URL and  page comment">Update a Page: Change URL and  page comment</a></li>
+                          <li><a href="#Update a Page: Pause to exclude from future test runs for now">Update a Page: Pause to exclude from future test runs for now</a></li>
+                          <li><a href="#Update a Page: Move to a different page group">Update a Page: Move to a different page group</a></li>
+                          <li><a href="#Delete a Page">Delete a Page</a></li>
+                      </ul>
+                  </li>
+                  <li class="folder">
+                      <div class="folder-title">Screenshots (5 requests)</div>
+                      <ul class="folder-files">
+                          <li><a href="#Create Screenshot for URL (NOT async, takes up to 45s)">Create Screenshot for URL (NOT async, takes up to 45s)</a></li>
+                          <li><a href="#Compare URL vs Uploaded Screenshot (NOT async, takes up to 60s)">Compare URL vs Uploaded Screenshot (NOT async, takes up to 60s)</a></li>
+                          <li><a href="#Load Screenshot by ID">Load Screenshot by ID</a></li>
+                          <li><a href="#Load Processed Screenshot by ID">Load Processed Screenshot by ID</a></li>
+                          <li><a href="#Single Image With Previous, Current and Difference Screenshots Side-by-Side">Single Image With Previous, Current and Difference Screenshots Side-by-Side</a></li>
+                      </ul>
+                  </li>
+                  <li class="folder">
+                      <div class="folder-title">TestRuns (7 requests)</div>
+                      <ul class="folder-files">
+                          <li><a href="#List TestRuns">List TestRuns</a></li>
+                          <li><a href="#Get TestRun Details">Get TestRun Details</a></li>
+                          <li><a href="#Send TestRun Notifications">Send TestRun Notifications</a></li>
+                          <li><a href="#Preview TestRun Notifications">Preview TestRun Notifications</a></li>
+                          <li><a href="#Delete TestRun Notifications (only Slack)">Delete TestRun Notifications (only Slack)</a></li>
+                          <li><a href="#Cancel TestRun">Cancel TestRun</a></li>
+                          <li><a href="#Resume Canceled TestRun">Resume Canceled TestRun</a></li>
+                      </ul>
+                  </li>
+                  <li class="folder">
+                      <div class="folder-title">Tests (2 requests)</div>
+                      <ul class="folder-files">
+                          <li><a href="#Start a New Test Run">Start a New Test Run</a></li>
+                          <li><a href="#List Tests">List Tests</a></li>
+                      </ul>
+                  </li>
+                  <li class="folder">
+                      <div class="folder-title">Users (2 requests)</div>
+                      <ul class="folder-files">
+                          <li><a href="#Current User Details">Current User Details</a></li>
+                          <li><a href="#List all Users within Current Organization">List all Users within Current Organization</a></li>
+                      </ul>
+                  </li>
+                  <li class="folder">
+                      <div class="folder-title">Websites (5 requests)</div>
+                      <ul class="folder-files">
+                          <li><a href="#Get a Website">Get a Website</a></li>
+                          <li><a href="#Add a Website">Add a Website</a></li>
+                          <li><a href="#Update a Website">Update a Website</a></li>
+                          <li><a href="#Delete a Website">Delete a Website</a></li>
+                          <li><a href="#List Websites">List Websites</a></li>
+                      </ul>
+                  </li>
+          </ul>
+      </div>
+  
+      <main class="main-content">
+          <h2>Authentication</h2>
+  
+          <div class="authentication">
+                <p><a href="https://en.wikipedia.org/wiki/Basic_access_authentication" target="_blank">Basic Authentication</a></p>
+          </div>
+          <h2>API Requests</h2>
+  
+            <div class="request" id="Update Comparison">
+                <div class="request-header">
+                    <h3 class="request-title">Update Comparison</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-PATCH">PATCH</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/comparisons/<span class="param">:id</span></span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+            
+            
+                    <div class="section">
+                        <h3>Path Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">id</td>
+                                    <td>119008</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+            
+            
+                </div>
+            </div>
+            <div class="request" id="Get a Website">
+                <div class="request-header">
+                    <h3 class="request-title">Get a Website</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-GET">GET</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/websites/<span class="param">:id</span></span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+                    <div class="section">
+                        <h3>Headers</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Header</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">Content-Type</td>
+                                    <td>application/json</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+                    <div class="section">
+                        <h3>Path Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">id</td>
+                                    <td>31</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+            
+            
+                </div>
+            </div>
+            <div class="request" id="Reprocess Comparison">
+                <div class="request-header">
+                    <h3 class="request-title">Reprocess Comparison</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-GET">GET</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/comparisons/<span class="param">:id</span>/reprocess</span></div>
+                    </div>
+                </div>
+            
+                <div class="request-description">
+                    <p>Reprocess existing comparison.
+            Uses existing screenshots but repeats layout shifts detection and comparison process. Might be usefull to test changes in layout shift detection or comparison parameters.</p>
+                </div>
+            
+                <div class="request-body">
+            
+            
+                    <div class="section">
+                        <h3>Path Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">id</td>
+                                    <td>119008</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+                    <div class="section">
+                        <h3>Request Body</h3>
+                        <div class="json-block"><span class="json-brace json-brace-open">{</span><div class="json-object">
+              <span class="json-key">&quot;comments&quot;</span><span class="json-colon">:</span> <span class="json-string">&quot;TEST&quot;</span><span class="json-comma">,</span><br/>
+              <span class="json-key">&quot;labels&quot;</span><span class="json-colon">:</span> <span class="json-bracket json-bracket-open">[</span><div class="json-array">
+                <span class="json-number">1</span><span class="json-comma">,</span><br/>
+                <span class="json-number">2</span><span class="json-comma">,</span><br/>
+                <span class="json-number">3</span>
+              </div><span class="json-bracket json-bracket-close">]</span>
+            </div><span class="json-brace json-brace-close">}</span></div>
+                    </div>
+            
+            
+                </div>
+            </div>
+            <div class="request" id="Add a Website">
+                <div class="request-header">
+                    <h3 class="request-title">Add a Website</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-POST">POST</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/websites/</span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+                    <div class="section">
+                        <h3>Headers</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Header</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">Content-Type</td>
+                                    <td>application/json</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+            
+            
+                    <div class="section">
+                        <h3>Request Body</h3>
+                        <div class="json-block"><span class="json-brace json-brace-open">{</span><div class="json-object">
+              <span class="json-key">&quot;name&quot;</span><span class="json-colon">:</span> <span class="json-string">&quot;Example&quot;</span><span class="json-comma">,</span><br/>
+              <span class="json-key">&quot;prod_domain&quot;</span><span class="json-colon">:</span> <span class="json-string">&quot; https://example.com/ &quot;</span><span class="json-comma">,</span><br/>
+              <span class="json-key">&quot;project_id&quot;</span><span class="json-colon">:</span> <span class="json-number">1</span>
+            </div><span class="json-brace json-brace-close">}</span></div>
+                    </div>
+            
+            
+                </div>
+            </div>
+            <div class="request" id="Start a New Test Run">
+                <div class="request-header">
+                    <h3 class="request-title">Start a New Test Run</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-POST">POST</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/tests/<span class="param">:test_id</span>/run/</span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+            
+            
+                    <div class="section">
+                        <h3>Path Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">test_id</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+            
+            
+                </div>
+            </div>
+            <div class="request" id="Current User Details">
+                <div class="request-header">
+                    <h3 class="request-title">Current User Details</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-GET">GET</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/users/me/</span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+            
+                    <div class="section">
+                        <h3>Query Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">orderBy</td>
+                                    <td>created_at</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">orderDir</td>
+                                    <td>desc</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">limit</td>
+                                    <td>500</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">offset</td>
+                                    <td>0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+            
+            
+            
+                </div>
+            </div>
+            <div class="request" id="Update a Website">
+                <div class="request-header">
+                    <h3 class="request-title">Update a Website</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-PATCH">PATCH</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/websites/<span class="param">:id</span></span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+                    <div class="section">
+                        <h3>Headers</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Header</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">Content-Type</td>
+                                    <td>application/json</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+                    <div class="section">
+                        <h3>Path Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">id</td>
+                                    <td>31</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+                    <div class="section">
+                        <h3>Request Body</h3>
+                        <div class="json-block"><span class="json-brace json-brace-open">{</span><div class="json-object">
+              <span class="json-key">&quot;name&quot;</span><span class="json-colon">:</span> <span class="json-string">&quot;Example 1&quot;</span><span class="json-comma">,</span><br/>
+              <span class="json-key">&quot;dev_domain&quot;</span><span class="json-colon">:</span> <span class="json-string">&quot;https://dev.example.com&quot;</span>
+            </div><span class="json-brace json-brace-close">}</span></div>
+                    </div>
+            
+            
+                </div>
+            </div>
+            <div class="request" id="List Tests">
+                <div class="request-header">
+                    <h3 class="request-title">List Tests</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-GET">GET</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/tests/</span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+            
+                    <div class="section">
+                        <h3>Query Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">orderBy</td>
+                                    <td>created_at</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">orderDir</td>
+                                    <td>desc</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">limit</td>
+                                    <td>500</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">offset</td>
+                                    <td>0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+            
+            
+            
+                </div>
+            </div>
+            <div class="request" id="List all Users within Current Organization">
+                <div class="request-header">
+                    <h3 class="request-title">List all Users within Current Organization</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-GET">GET</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/users/</span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+            
+                    <div class="section">
+                        <h3>Query Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">orderBy</td>
+                                    <td>created_at</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">orderDir</td>
+                                    <td>desc</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">limit</td>
+                                    <td>500</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">offset</td>
+                                    <td>0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+            
+            
+            
+                </div>
+            </div>
+            <div class="request" id="Delete a Website">
+                <div class="request-header">
+                    <h3 class="request-title">Delete a Website</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-DELETE">DELETE</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/websites/<span class="param">:id</span></span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+            
+            
+                    <div class="section">
+                        <h3>Path Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">id</td>
+                                    <td>282</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+                    <div class="section">
+                        <h3>Authentication</h3>
+                        <div class="auth-info">
+                            <div class="auth-type">Basic Authentication</div>
+                        </div>
+                    </div>
+            
+            
+            
+                </div>
+            </div>
+            <div class="request" id="List Websites">
+                <div class="request-header">
+                    <h3 class="request-title">List Websites</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-GET">GET</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/websites/</span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+            
+                    <div class="section">
+                        <h3>Query Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">orderBy</td>
+                                    <td>created_at</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">orderDir</td>
+                                    <td>desc</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">limit</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">offset</td>
+                                    <td>0</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">cursor</td>
+                                    <td>1</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+                    <div class="section">
+                        <h3>Authentication</h3>
+                        <div class="auth-info">
+                            <div class="auth-type">Basic Authentication</div>
+                        </div>
+                    </div>
+            
+            
+            
+                </div>
+            </div>
+            <div class="request" id="Create Screenshot for URL (NOT async, takes up to 45s)">
+                <div class="request-header">
+                    <h3 class="request-title">Create Screenshot for URL (NOT async, takes up to 45s)</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-GET">GET</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/screenshot</span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+            
+                    <div class="section">
+                        <h3>Query Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">url</td>
+                                    <td>https://www.example.com/@!0,1</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">width</td>
+                                    <td>1440</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">height</td>
+                                    <td>1024</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+            
+            
+            
+                </div>
+            </div>
+            <div class="request" id="Compare URL vs Uploaded Screenshot (NOT async, takes up to 60s)">
+                <div class="request-header">
+                    <h3 class="request-title">Compare URL vs Uploaded Screenshot (NOT async, takes up to 60s)</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-POST">POST</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/compare</span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+                    <div class="section">
+                        <h3>Headers</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Header</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">Content-Type</td>
+                                    <td>multipart/form-data</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+            
+            
+            
+            
+                </div>
+            </div>
+            <div class="request" id="Load Screenshot by ID">
+                <div class="request-header">
+                    <h3 class="request-title">Load Screenshot by ID</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-GET">GET</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/screenshots/<span class="param">:screenshot_id</span></span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+            
+            
+                    <div class="section">
+                        <h3>Path Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">screenshot_id</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+            
+            
+                </div>
+            </div>
+            <div class="request" id="List TestRuns">
+                <div class="request-header">
+                    <h3 class="request-title">List TestRuns</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-GET">GET</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/testruns/</span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+            
+                    <div class="section">
+                        <h3>Query Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">orderBy</td>
+                                    <td>created_at</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">orderDir</td>
+                                    <td>desc</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">limit</td>
+                                    <td>500</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">offset</td>
+                                    <td>0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+            
+            
+            
+                </div>
+            </div>
+            <div class="request" id="List Pages">
+                <div class="request-header">
+                    <h3 class="request-title">List Pages</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-GET">GET</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/pages/</span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+            
+                    <div class="section">
+                        <h3>Query Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">orderBy</td>
+                                    <td>created_at</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">orderDir</td>
+                                    <td>desc</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">limit</td>
+                                    <td>500</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">offset</td>
+                                    <td>0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+            
+            
+            
+                </div>
+            </div>
+            <div class="request" id="Load Processed Screenshot by ID">
+                <div class="request-header">
+                    <h3 class="request-title">Load Processed Screenshot by ID</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-GET">GET</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/screenshots/<span class="param">:screenshot_id</span>/processed/</span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+            
+            
+                    <div class="section">
+                        <h3>Path Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">screenshot_id</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+            
+            
+                </div>
+            </div>
+            <div class="request" id="Get TestRun Details">
+                <div class="request-header">
+                    <h3 class="request-title">Get TestRun Details</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-GET">GET</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/testruns/<span class="param">:test_run_id</span>/</span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+            
+            
+                    <div class="section">
+                        <h3>Path Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">test_run_id</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+            
+            
+                </div>
+            </div>
+            <div class="request" id="List Pages: With sorting">
+                <div class="request-header">
+                    <h3 class="request-title">List Pages: With sorting</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-GET">GET</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/pages/</span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+            
+                    <div class="section">
+                        <h3>Query Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">orderBy</td>
+                                    <td>created_at</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">orderDir</td>
+                                    <td>desc</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">limit</td>
+                                    <td>500</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">offset</td>
+                                    <td>0</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+            
+            
+            
+                </div>
+            </div>
+            <div class="request" id="Single Image With Previous, Current and Difference Screenshots Side-by-Side">
+                <div class="request-header">
+                    <h3 class="request-title">Single Image With Previous, Current and Difference Screenshots Side-by-Side</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-GET">GET</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/comparisons/<span class="param">:comparison_id</span>/screenshot/</span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+            
+            
+                    <div class="section">
+                        <h3>Path Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">comparison_id</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+            
+            
+                </div>
+            </div>
+            <div class="request" id="Send TestRun Notifications">
+                <div class="request-header">
+                    <h3 class="request-title">Send TestRun Notifications</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-GET">GET</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/testruns/<span class="param">:test_run_id</span>/notify</span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+            
+            
+                    <div class="section">
+                        <h3>Path Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">test_run_id</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+            
+            
+                </div>
+            </div>
+            <div class="request" id="List Pages: With pagination">
+                <div class="request-header">
+                    <h3 class="request-title">List Pages: With pagination</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-GET">GET</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/pages/</span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+            
+                    <div class="section">
+                        <h3>Query Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">limit</td>
+                                    <td>50</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">offset</td>
+                                    <td>50</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">orderBy</td>
+                                    <td>created_at</td>
+                                </tr>
+                                <tr>
+                                    <td class="param-key">orderDir</td>
+                                    <td>desc</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+            
+            
+            
+                </div>
+            </div>
+            <div class="request" id="Preview TestRun Notifications">
+                <div class="request-header">
+                    <h3 class="request-title">Preview TestRun Notifications</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-GET">GET</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/testruns/<span class="param">:test_run_id</span>/notify/preview</span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+            
+            
+                    <div class="section">
+                        <h3>Path Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">test_run_id</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+            
+            
+                </div>
+            </div>
+            <div class="request" id="Add a Page">
+                <div class="request-header">
+                    <h3 class="request-title">Add a Page</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-POST">POST</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/pages/</span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+                    <div class="section">
+                        <h3>Headers</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Header</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">Content-Type</td>
+                                    <td>application/json</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+            
+            
+                    <div class="section">
+                        <h3>Request Body</h3>
+                        <div class="json-block"><span class="json-brace json-brace-open">{</span><div class="json-object">
+              <span class="json-key">&quot;url&quot;</span><span class="json-colon">:</span> <span class="json-string">&quot;https://example.org/&quot;</span><span class="json-comma">,</span><br/>
+              <span class="json-key">&quot;comment&quot;</span><span class="json-colon">:</span> <span class="json-null">null</span><span class="json-comma">,</span><br/>
+              <span class="json-key">&quot;page_group_id&quot;</span><span class="json-colon">:</span> <span class="json-handlebars">{{page_group_id}}</span>
+            </div><span class="json-brace json-brace-close">}</span></div>
+                    </div>
+            
+            
+                </div>
+            </div>
+            <div class="request" id="Delete TestRun Notifications (only Slack)">
+                <div class="request-header">
+                    <h3 class="request-title">Delete TestRun Notifications (only Slack)</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-DELETE">DELETE</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/testruns/<span class="param">:test_run_id</span>/notify</span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+            
+            
+                    <div class="section">
+                        <h3>Path Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">test_run_id</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+            
+            
+                </div>
+            </div>
+            <div class="request" id="Update a Page: Change URL and  page comment">
+                <div class="request-header">
+                    <h3 class="request-title">Update a Page: Change URL and  page comment</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-PATCH">PATCH</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/pages/<span class="param">:id</span></span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+                    <div class="section">
+                        <h3>Headers</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Header</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">Content-Type</td>
+                                    <td>application/json</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+                    <div class="section">
+                        <h3>Path Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">id</td>
+                                    <td>282</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+                    <div class="section">
+                        <h3>Request Body</h3>
+                        <div class="json-block"><span class="json-brace json-brace-open">{</span><div class="json-object">
+              <span class="json-key">&quot;comment&quot;</span><span class="json-colon">:</span> <span class="json-string">&quot;Test comment&quot;</span><span class="json-comma">,</span><br/>
+              <span class="json-key">&quot;url&quot;</span><span class="json-colon">:</span> <span class="json-string">&quot;http://example.org&quot;</span>
+            </div><span class="json-brace json-brace-close">}</span></div>
+                    </div>
+            
+            
+                </div>
+            </div>
+            <div class="request" id="Cancel TestRun">
+                <div class="request-header">
+                    <h3 class="request-title">Cancel TestRun</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-POST">POST</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/testruns/<span class="param">:test_run_id</span>/cancel</span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+            
+            
+                    <div class="section">
+                        <h3>Path Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">test_run_id</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+            
+            
+                </div>
+            </div>
+            <div class="request" id="Update a Page: Pause to exclude from future test runs for now">
+                <div class="request-header">
+                    <h3 class="request-title">Update a Page: Pause to exclude from future test runs for now</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-PATCH">PATCH</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/pages/<span class="param">:id</span></span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+                    <div class="section">
+                        <h3>Headers</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Header</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">Content-Type</td>
+                                    <td>application/json</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+                    <div class="section">
+                        <h3>Path Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">id</td>
+                                    <td>282</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+                    <div class="section">
+                        <h3>Request Body</h3>
+                        <div class="json-block"><span class="json-brace json-brace-open">{</span><div class="json-object">
+              <span class="json-key">&quot;paused_at&quot;</span><span class="json-colon">:</span> <span class="json-string">&quot;2024-01-01T01:00:00.000Z&quot;</span>
+            </div><span class="json-brace json-brace-close">}</span></div>
+                    </div>
+            
+            
+                </div>
+            </div>
+            <div class="request" id="Resume Canceled TestRun">
+                <div class="request-header">
+                    <h3 class="request-title">Resume Canceled TestRun</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-POST">POST</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/testruns/<span class="param">:test_run_id</span>/resume</span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+            
+            
+                    <div class="section">
+                        <h3>Path Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">test_run_id</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+            
+            
+                </div>
+            </div>
+            <div class="request" id="Update a Page: Move to a different page group">
+                <div class="request-header">
+                    <h3 class="request-title">Update a Page: Move to a different page group</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-PATCH">PATCH</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/pages/<span class="param">:id</span></span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+                    <div class="section">
+                        <h3>Headers</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Header</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">Content-Type</td>
+                                    <td>application/json</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+                    <div class="section">
+                        <h3>Path Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">id</td>
+                                    <td>282</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+                    <div class="section">
+                        <h3>Request Body</h3>
+                        <div class="json-block"><span class="json-brace json-brace-open">{</span><div class="json-object">
+              <span class="json-key">&quot;page_group_id&quot;</span><span class="json-colon">:</span> <span class="json-number">21</span>
+            </div><span class="json-brace json-brace-close">}</span></div>
+                    </div>
+            
+            
+                </div>
+            </div>
+            <div class="request" id="Delete a Page">
+                <div class="request-header">
+                    <h3 class="request-title">Delete a Page</h3>
+                    <div class="request-meta">
+                        <span class="method-badge method-DELETE">DELETE</span>
+                        <div class="url"><span class="protocol">https:</span>//<span class="host">api.sentinus.vision</span><span class="path">/pages/<span class="param">:id</span></span></div>
+                    </div>
+                </div>
+            
+            
+                <div class="request-body">
+            
+            
+                    <div class="section">
+                        <h3>Path Parameters</h3>
+                        <table class="params-table">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-key">id</td>
+                                    <td>282</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+            
+            
+            
+            
+                </div>
+            </div>
+      </main>
+  
+      <footer class="footer">
+          <p>Generated on July 30, 2025 at 06:25 PM</p>
+      </footer>
+  </div>
+</body>
+</html>

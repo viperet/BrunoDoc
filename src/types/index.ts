@@ -6,6 +6,7 @@ export interface BuildOptions {
   format: string;
   exclude?: string[];
   verbose: boolean;
+  env?: string;
 }
 
 export interface Request {
@@ -65,11 +66,14 @@ export interface Scripts {
 }
 
 export interface BruFile {
+  filename: string;
   meta: {
     name: string;
     type: 'http' | 'graphql';
     seq: number;
   };
+  description?: string;
+
   // HTTP Methods
   get?: Request;
   post?: Request;
@@ -82,6 +86,7 @@ export interface BruFile {
   connect?: Request;
 
   // Auth configurations
+  'auth'?: 'none' | 'basic' | 'bearer' | 'digest' | 'inherit';
   'auth:basic'?: AuthBasic;
   'auth:bearer'?: AuthBearer;
   'auth:digest'?: AuthDigest;
@@ -109,6 +114,9 @@ export interface BruFile {
 
   // Tests
   tests?: string;
+
+  // Variables
+  variables?: Record<string, string>;
 }
 
 export interface BruFolder {
@@ -124,4 +132,10 @@ export interface BruCollection {
   'auth:digest'?: AuthDigest;
   folders: BruFolder[];
   name: string; // from bruno.json "name" field
+  environments?: Record<string, BruEnvironment>; // from environments/*.bru
+}
+
+export interface BruEnvironment {
+  name: string; // filename without extension
+  variables?: Record<string, string>; // from .bru vars section
 }

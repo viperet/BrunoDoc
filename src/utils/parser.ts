@@ -67,10 +67,25 @@ export function parseBruCollection(folderPath: string, excludePatterns: string[]
       // Skip collection metadata files and parse only directories
       if (stats.isDirectory()) {
         // Recursively parse subfolders
-        const subFolder = parseBruFolder(itemPath, excludePatterns);
+        if (item === 'environments') {
+          const environments = parseBruFolder(itemPath, excludePatterns);
+          bruCollection.environments = bruCollection.environments || {};
+          if (environments && environments.files.length > 0) {
+            for (const environment of environments.files) {
+              const envName = basename(environment.filename, '.bru');
+              console.log(`Env found: ${envName}, vars`, environment.variables);
+              bruCollection.environments[envName] = {
+                name: envName,
+                variables: environment.variables || {}
+              };
+            }
+          }
+        } else {
+          const subFolder = parseBruFolder(itemPath, excludePatterns);
 
-        if (subFolder) {
-          bruCollection.folders.push(subFolder);
+          if (subFolder) {
+            bruCollection.folders.push(subFolder);
+          }
         }
       }
       // Note: We don't parse .bru files at collection level, only in folders
@@ -135,8 +150,8 @@ export function parseBruFolder(folderPath: string, excludePatterns: string[]): B
         try {
           const bruFile = parseBru(itemPath);
           if (!bruFile.meta.name) {
-            console.warn(`Warning: .bru file '${item}' has no name defined in meta block.`);
-            continue; // Skip files without a name
+            // console.warn(`Warning: .bru file '${item}' has no name defined in meta block.`);
+            // continue; // Skip files without a name
           }
           bruFolder.files.push(bruFile);
         } catch (error) {
@@ -174,6 +189,7 @@ export function parseBru(filePath: string): BruFile {
   const lines = content.split('\n');
 
   const bruFile: BruFile = {
+    filename: filePath,
     meta: {
       name: '',
       type: 'http',
@@ -275,6 +291,10 @@ function processBlock(bruFile: BruFile, blockType: string, content: string[]): v
       break;
 
     // Auth
+    case 'auth':
+      const authParams = parseKeyValuePairs(contentStr);
+      bruFile.auth = authParams['mode'] || 'none';
+      break;
     case 'auth:basic':
       parseAuthBasic(bruFile, contentStr);
       break;
@@ -337,8 +357,16 @@ function processBlock(bruFile: BruFile, blockType: string, content: string[]): v
       bruFile.tests = contentStr;
       break;
 
+    case 'vars':
+      bruFile.variables = parseKeyValuePairs(contentStr);
+      break;
+
+    case 'docs':
+      bruFile.description = contentStr;
+      break;
+
     default:
-      console.warn(`Unknown block type: ${blockType}`);
+      console.warn(`Unknown block type: ${blockType} in file ${bruFile.filename}`);
   }
 }
 

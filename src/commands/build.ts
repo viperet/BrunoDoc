@@ -102,6 +102,19 @@ function generateDocumentation(collection: BruCollection, options: BuildOptions)
   // Process collection data
   const templateData = templateEngine.processCollection(collection);
 
+  if (options.env) {
+    if (!collection.environments || !collection.environments[options.env]) {
+      console.warn(`Environment '${options.env}' not found in collection, skipping variable substitution.`);
+    } else {
+      console.log(`Using environment '${options.env}' for variable substitution`);
+      // replace environment variables in templateData
+      for(const request of templateData.allRequests) {
+        if (request.url) {
+          request.url = templateEngine.renderString(request.url, collection.environments?.[options.env].variables || {});
+        }
+      }
+    }
+  }
   // Load and render main template
   const templatePath = join(templateDir, template ? `${template}.hbs` : 'index.hbs');
 
