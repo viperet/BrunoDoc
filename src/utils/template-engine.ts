@@ -1,4 +1,4 @@
-import Handlebars from 'handlebars';
+import Handlebars, { HelperOptions } from 'handlebars';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { BruFolder, BruFile, BruCollection } from '../types/index.js';
@@ -20,6 +20,7 @@ export interface ProcessedRequest extends BruFile {
   url?: string;
   queryParams?: Record<string, any>;
   pathParams?: Record<string, any>;
+  description?: string;
   auth?: {
     type: string;
     details?: string;
@@ -62,8 +63,8 @@ export class TemplateEngine {
     });
 
     // Helper for conditional equality
-    this.handlebars.registerHelper('eq', function(a: any, b: any) {
-      return a === b;
+    this.handlebars.registerHelper('eq', function(a: any, b: any, options: HelperOptions) {
+      return a === b ? options.fn(this) : options.inverse(this);
     });
 
     // Helper for conditional not equality
@@ -92,6 +93,23 @@ export class TemplateEngine {
       });
     });
 
+    // Helper to format URLs (example: https://api.sentinus.vision/testruns/:test_run_id/notify)
+    this.handlebars.registerHelper('formatUrl', function(url: string, options: HelperOptions) {
+      if (!url) return '';
+      const parsedUrl = new URL(url);
+      // Escape HTML entities in protocol, host, and pathname
+      const escapeHtml = (str: string) =>
+        str.replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+
+      const pathname = escapeHtml(parsedUrl.pathname).replace(/(:[^/]+)/g, '<span class="param">$1</span>');
+      const html = `<span class="protocol">${escapeHtml(parsedUrl.protocol)}</span>//<span class="host">${escapeHtml(parsedUrl.host)}</span><span class="path">${pathname}</span>`;
+      return new Handlebars.SafeString(html);
+    });
+
     // Helper for math operations
     this.handlebars.registerHelper('subtract', function(a: number, b: number) {
       return a - b;
@@ -103,6 +121,14 @@ export class TemplateEngine {
         return options.fn(this);
       }
       return options.inverse(this);
+    });
+
+    // Plural helper
+    this.handlebars.registerHelper('pluralize', function(count: number, singular: string, plural?: string) {
+      if (typeof plural !== 'string') {
+        plural = singular + 's'; // Default pluralization
+      }
+      return count + ' ' + (count === 1 ? singular : plural);
     });
   }
 
@@ -188,6 +214,8 @@ export class TemplateEngine {
         processed.method = method.toUpperCase();
         const request = file[method as keyof BruFile] as any;
         processed.url = request?.url;
+        // remove all query parameters from processed.url
+        processed.url = processed.url.split('?')[0];
         break;
       }
     }
@@ -247,22 +275,6 @@ export class TemplateEngine {
     return processed;
   }
 
-  private calculateStats(collection: BruFolder, allRequests: ProcessedRequest[]) {
-    const httpMethods = new Set<string>();
-
-    allRequests.forEach(request => {
-      if (request.method) {
-        httpMethods.add(request.method);
-      }
-    });
-
-    return {
-      totalRequests: allRequests.length,
-      totalFolders: this.countFolders(collection),
-      httpMethods: Array.from(httpMethods).sort()
-    };
-  }
-
   private calculateStatsFromCollection(collection: BruCollection, allRequests: ProcessedRequest[]) {
     const httpMethods = new Set<string>();
 
@@ -297,6 +309,11 @@ export class TemplateEngine {
 
   public render(templatePath: string, data: TemplateData): string {
     const template = this.loadTemplate(templatePath);
+    return template(data);
+  }
+
+  public renderString(templateString: string, data: Record<string, any>): string {
+    const template = this.handlebars.compile(templateString);
     return template(data);
   }
 }
