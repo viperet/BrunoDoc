@@ -1,7 +1,7 @@
 import Handlebars, { HelperOptions } from 'handlebars';
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import { BruFolder, BruFile, BruCollection } from '../types/index.js';
+import { BruFolder, BruFile, BruCollection, BodyForm } from '../types/index.js';
 import { formatJson } from './json.js';
 
 export interface TemplateData {
@@ -25,7 +25,9 @@ export interface ProcessedRequest extends BruFile {
     type: string;
     details?: string;
   };
+  bodyType?: string;
   body?: string;
+  bodyForm?: BodyForm;
   scripts?: {
     preRequest?: string;
     postResponse?: string;
@@ -174,11 +176,11 @@ export class TemplateEngine {
     // Recursively process all folders in the collection
     for (const folder of collection.folders) {
       const folderRequests = this.extractAllRequests(folder);
+      // Sort by sequence number
+      folderRequests.sort((a, b) => a.meta.seq - b.meta.seq);
       requests.push(...folderRequests);
     }
 
-    // Sort by sequence number
-    requests.sort((a, b) => a.meta.seq - b.meta.seq);
 
     return requests;
   }
@@ -250,6 +252,7 @@ export class TemplateEngine {
 
     // Process body
     if (file['body:json']) {
+      processed.bodyType = 'JSON';
       try {
         processed.body = formatJson(file['body:json'], 'html');
       } catch (error) {
@@ -258,11 +261,28 @@ export class TemplateEngine {
       }
     } else if (file['body:text']) {
       processed.body = file['body:text'];
+      processed.bodyType = 'Text';
     } else if (file['body:xml']) {
       processed.body = file['body:xml'];
+      processed.bodyType = 'XML';
+    } else if (file['body:graphql']) {
+      processed.bodyType = 'GraphQL';
+      processed.body = file['body:graphql'];
+      if (file['body:graphql:vars']) {
+        processed.body += file['body:graphql:vars'];
+      }
     } else if (file.body) {
       processed.body = file.body;
     }
+    if (file['body:form-urlencoded']) {
+      processed.bodyType = 'Form URL Encoded';
+      processed.bodyForm = file['body:form-urlencoded'];
+    } else if (file['body:multipart-form']) {
+      processed.bodyType = 'Multipart Form';
+      processed.bodyForm = file['body:multipart-form'];
+    }
+
+    // console.log(`Processing request: ${file.meta.name} (${processed.method})`, file);
 
     // Process scripts
     if (file['script:pre-request'] || file['script:post-response']) {

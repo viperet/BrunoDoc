@@ -73,7 +73,6 @@ export function parseBruCollection(folderPath: string, excludePatterns: string[]
           if (environments && environments.files.length > 0) {
             for (const environment of environments.files) {
               const envName = basename(environment.filename, '.bru');
-              console.log(`Env found: ${envName}, vars`, environment.variables);
               bruCollection.environments[envName] = {
                 name: envName,
                 variables: environment.variables || {}
@@ -211,7 +210,7 @@ export function parseBru(filePath: string): BruFile {
     }
 
     // Check for block start
-    const blockMatch = line.match(/^([a-zA-Z:]+)\s*\{/);
+    const blockMatch = line.match(/^([a-zA-Z:\-]+)\s*\{/);
     if (blockMatch && !inBlock) {
       currentBlock = blockMatch[1];
       inBlock = true;
@@ -271,7 +270,6 @@ export function parseBru(filePath: string): BruFile {
 
 function processBlock(bruFile: BruFile, blockType: string, content: string[]): void {
   const contentStr = content.join('\n').trim();
-
   switch (blockType) {
     case 'meta':
       parseMeta(bruFile, contentStr);
@@ -335,6 +333,7 @@ function processBlock(bruFile: BruFile, blockType: string, content: string[]): v
       parseBodyForm(bruFile, contentStr, 'body:form-urlencoded');
       break;
     case 'body:multipart-form':
+      console.log(`Parsing multipart form body for file: ${bruFile.filename}`, contentStr);
       parseBodyForm(bruFile, contentStr, 'body:multipart-form');
       break;
     case 'body:graphql':

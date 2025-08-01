@@ -100,8 +100,29 @@
 
         {{#if body}}
         <div class="section">
-            <h3>Request Body</h3>
+            <h3>Request Body ({{bodyType}}</h3>
             <div class="json-block">{{{body}}}</div>
+        </div>
+        {{/if}}
+        {{#if bodyForm}}
+        <div class="section">
+            <h3>Request Body ({{bodyType}})</h3>
+            <table class="params-table">
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each bodyForm}}
+                    <tr>
+                        <td class="param-key">{{@key}}</td>
+                        <td>{{this}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
         </div>
         {{/if}}
 
