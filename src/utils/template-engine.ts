@@ -1,6 +1,6 @@
 import Handlebars, { HelperOptions } from 'handlebars';
 import { readFileSync } from 'fs';
-import { join } from 'path';
+import markdownit from 'markdown-it'
 import { BruFolder, BruFile, BruCollection, BodyForm } from '../types/index.js';
 import { formatJson } from './json.js';
 
@@ -208,6 +208,21 @@ export class TemplateEngine {
 
   private processRequest(file: BruFile): ProcessedRequest {
     const processed: ProcessedRequest = { ...file };
+
+    // Format Markdown description
+    if (file.description) {
+      try {
+        const md = markdownit();
+        processed.description = md.render(file.description);
+      } catch (error) {
+        console.warn(`Failed to parse Markdown description for file ${file.meta.name}: ${error}`);
+        // Escape HTML as fallback
+        processed.description = file.description
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+      }
+    }
 
     // Determine HTTP method and URL
     const methods = ['get', 'post', 'put', 'delete', 'patch', 'head', 'options', 'trace', 'connect'];
