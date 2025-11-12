@@ -1,6 +1,8 @@
 import Handlebars, { HelperOptions } from 'handlebars';
 import { readFileSync } from 'fs';
 import markdownit from 'markdown-it'
+import markdownithighlight from 'markdown-it-highlightjs';
+import hljs from 'highlight.js';
 import { BruFolder, BruFile, BruCollection, BodyForm } from '../types/index.js';
 import { formatJson } from './json.js';
 
@@ -212,8 +214,16 @@ export class TemplateEngine {
     // Format Markdown description
     if (file.description) {
       try {
-        const md = markdownit();
+        const md = markdownit({
+          highlight(str, lang, attrs) {
+              if (lang == 'json') {
+                return '<pre class="json-block">' + formatJson(str, 'html') + '</pre>';
+              }
+              return '';
+          },
+        }); // .use(markdownithighlight, { inline: true, hljs });
         processed.description = md.render(file.description);
+        console.log(`\n======\n${file.description}\n==========`);
       } catch (error) {
         console.warn(`Failed to parse Markdown description for file ${file.meta.name}: ${error}`);
         // Escape HTML as fallback

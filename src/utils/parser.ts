@@ -202,7 +202,7 @@ export function parseBru(filePath: string): BruFile {
   let inBlock = false;
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i].trim();
+    const line = lines[i];//.trim();
 
     // Skip empty lines and comments when not in a block
     if (!inBlock && (line === '' || line.startsWith('//'))) {
@@ -217,7 +217,7 @@ export function parseBru(filePath: string): BruFile {
       braceCount = 1;
 
       // Check if the block has content on the same line
-      const restOfLine = line.substring(blockMatch[0].length).trim();
+      const restOfLine = line.substring(blockMatch[0].length);//.trim();
       if (restOfLine) {
         if (restOfLine === '}') {
           // Empty block
@@ -248,7 +248,7 @@ export function parseBru(filePath: string): BruFile {
         if (line === '}') {
           contentLine = '';
         } else if (line.endsWith('}')) {
-          contentLine = line.substring(0, line.length - 1).trim();
+          contentLine = line.substring(0, line.length - 1);//.trim();
         }
 
         if (contentLine) {
@@ -361,7 +361,7 @@ function processBlock(bruFile: BruFile, blockType: string, content: string[]): v
       break;
 
     case 'docs':
-      bruFile.description = contentStr;
+      bruFile.description = content.map((line) => line.startsWith('  ') ? line.slice(2) : line).join('\n');
       break;
 
     default:
