@@ -269,7 +269,7 @@ export function parseBru(filePath: string): BruFile {
 }
 
 function processBlock(bruFile: BruFile, blockType: string, content: string[]): void {
-  const contentStr = content.join('\n').trim();
+  const contentStr = content.map(line => line.trim()).join('\n');
   switch (blockType) {
     case 'meta':
       parseMeta(bruFile, contentStr);

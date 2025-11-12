@@ -223,7 +223,6 @@ export class TemplateEngine {
           },
         }); // .use(markdownithighlight, { inline: true, hljs });
         processed.description = md.render(file.description);
-        console.log(`\n======\n${file.description}\n==========`);
       } catch (error) {
         console.warn(`Failed to parse Markdown description for file ${file.meta.name}: ${error}`);
         // Escape HTML as fallback
