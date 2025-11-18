@@ -37,6 +37,25 @@
     </main>
 
     <footer class="footer">
-        <p>Generated on {{formatDate generatedAt}}</p>
+        <p>Generated on <span id="generated-at" data-value="{{generatedAt}}">{{formatDate generatedAt}}</span></p>
     </footer>
 </div>
+<script>
+  (function() {
+    const el = document.getElementById('generated-at');
+    if (el) {
+      const dateStr = el.textContent;
+      const dateValue = el.getAttribute('data-value');
+      const date = new Date(dateValue);
+      el.textContent = date.toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZoneName: 'short'
+      });
+      el.title = dateStr;
+    }
+  })();
+</script>
